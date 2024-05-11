@@ -4,7 +4,7 @@
 // @version      1.0
 // @description  Automatically extracts Tumblr stats and writes to Google Sheets
 // @author       hokkienmee
-// @match        https://www.tumblr.com/blog/YOUR_TUMBLR_USERNAME //Replace with your tumblr username
+// @match        https://www.tumblr.com/blog/YOUR_TUMBLR_USERNAME 
 // @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
