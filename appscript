@@ -1,0 +1,22 @@
+function doPost(e) {
+  var sheet = SpreadsheetApp.openById("SHEET_ID").getSheetByName("Sheet1");
+  var postData = JSON.parse(e.postData.contents);
+  sheet.getRange("A2").setValue(postData.postCount);
+  sheet.getRange("B2").setValue(postData.followerCount);
+  sheet.getRange("C2").setValue(postData.followingCount);
+  return ContentService.createTextOutput("Success");
+}
+
+function doGet() {
+  var sheet = SpreadsheetApp.openById("SHEET_ID").getSheetByName("Sheet1");
+  var range = sheet.getRange("A2:C2"); 
+  var values = range.getValues();
+  var data = {
+    postCount: values[0][0], 
+    followerCount: values[0][1],
+    followingCount: values[0][2] 
+  };
+  return ContentService.createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
