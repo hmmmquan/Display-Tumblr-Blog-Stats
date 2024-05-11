@@ -47,7 +47,7 @@
     }
 
     function writeToSheet(postCount, followerCount, followingCount) {
-        const url = 'https://script.google.com/macros/s/SHEET_ID/exec';  //Replace with your web app's URL
+        const url = 'WEB_APP';  //Replace with your web app's URL
 
         GM_xmlhttpRequest({
             method: 'POST',
