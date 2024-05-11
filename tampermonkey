@@ -1,0 +1,70 @@
+// ==UserScript==
+// @name         Tumblr Stats to Google Sheets
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  Automatically extracts Tumblr stats and writes to Google Sheets
+// @author       hokkienmee
+// @match        https://www.tumblr.com/blog/YOUR_TUMBLR_USERNAME //Replace with your tumblr username
+// @grant        GM_xmlhttpRequest
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    function extractData() {
+        let postCount = '';
+        let followerCount = '';
+        let followingCount = '';
+
+        document.querySelectorAll('.jk3gM').forEach(element => {
+            if (element.textContent.includes("Posts")) {
+                const postsElem = element.querySelector('span.KlOKT');
+                if (postsElem) {
+                    postCount = postsElem.textContent.trim();
+                }
+            }
+            if (element.textContent.includes("Followers")) {
+                const followersElem = element.querySelector('span.KlOKT');
+                if (followersElem) {
+                    followerCount = followersElem.textContent.trim();
+                }
+            }
+        });
+
+        // Extract following count
+        document.querySelectorAll('.a132D').forEach(element => {
+            if (element.textContent.includes("Following")) {
+                const followingElem = element.querySelector('span.jF6A2');
+                if (followingElem) {
+                    followingCount = followingElem.textContent.trim();
+                }
+            }
+        });
+
+        if (postCount && followerCount && followingCount) {
+            writeToSheet(postCount, followerCount, followingCount);
+        }
+    }
+
+    function writeToSheet(postCount, followerCount, followingCount) {
+        const url = 'https://script.google.com/macros/s/SHEET_ID/exec';  //Replace with your web app's URL
+
+        GM_xmlhttpRequest({
+            method: 'POST',
+            url: url,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: JSON.stringify({
+                postCount: postCount,
+                followerCount: followerCount,
+                followingCount: followingCount
+            }),
+            onload: function(response) {
+                console.log('Data written to Google Sheets:', response.responseText);
+            }
+        });
+    }
+
+    setTimeout(extractData, 3000);
+})();
